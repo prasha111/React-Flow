@@ -11,14 +11,14 @@ function FirstPage() {
   const [nodesPanel, setNodesPanel] = useState(true );
   return (
     <div>
-        
     <Header/>
-    
     <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
-        <div>
-           
-       <MessageBox/>
-           
+        <div style={{width:'100%', height:'100%'}}>
+       {/* <MessageBox/> */}
+       <div class="check" style={{width:'100%', height:'100%'}}>
+        scxscs
+       <ReactFlowSpace/>
+       </div>
   
         </div>
             {nodesPanel ?

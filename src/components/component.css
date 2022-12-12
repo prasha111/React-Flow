@@ -1,8 +1,11 @@
-.dndflow {
+
+  .dndflow {
     flex-direction: column;
     display: flex;
     flex-grow: 1;
     height: 100%;
+    width: 100%;
+   
   }
   
   .dndflow aside {
@@ -28,25 +31,22 @@
     cursor: grab;
   }
   
-   .dndnode.input {
+  .dndflow .dndnode.input {
     border-color: #0041d0;
   }
-  .dndnode.output {
+  
+  .dndflow .dndnode.output {
     border-color: #ff0072;
   }
   
-   .reactflow-wrapper {
+  .dndflow .reactflow-wrapper {
     flex-grow: 1;
     height: 100%;
+    width: 100%;
   }
   
-   .selectall {
+  .dndflow .selectall {
     margin-top: 10px;
   }
   
-  @media screen and (min-width: 768px) {
-   
-  
-   
-  }
-  
+ 
