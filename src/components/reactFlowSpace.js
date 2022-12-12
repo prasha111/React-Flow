@@ -37,13 +37,20 @@ import messageSchema from "./messageSchema";
 // const nodeTypes = {
 //   special: CustomNode,
 // };
-
+const nodeTypes = { textUpdater: MessageBoxNode };
 const initialNodes = [
   { id: '1', type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: 123 } },
 ];
 // we define the nodeTypes outside of the component to prevent re-renderings
 // you could also use useMemo inside the component
-const nodeTypes = { textUpdater: MessageBoxNode };
+const initialNodes1  =  [
+  {
+    id: 1,
+    type:'default',
+    position:{ x: 0, y: 0 },
+    data: { label: MessageBoxNode(id) }
+  }
+]
 
 const drawerWidth = 240;
 
@@ -370,9 +377,8 @@ function ReactFlowSpace() {
       });
       const newNode = {
         id: getId(),
-        type: "textUpdater",
+        type: "default",
         position,
-        edges,
         data: { value: 123 }
       };
 
@@ -380,6 +386,7 @@ function ReactFlowSpace() {
     },
     [reactFlowInstance]
   )
+  
   return (
     <ReactFlowProvider>
     
