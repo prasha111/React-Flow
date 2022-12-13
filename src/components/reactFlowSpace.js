@@ -23,6 +23,7 @@ import Sidebar from "./Sidebar";
 import MessageBoxNode from "./messageBoxNode";
 import messageSchema from "./messageSchema";
 import { useMessage } from "./messageProvider";
+import jsonData from './messageData';
 
 //https://meet.google.com/qtb-isyp-kqy
 //https://reactflow.dev/docs/examples/interaction/drag-and-drop/
@@ -43,14 +44,8 @@ const nodeTypes = { textUpdater: MessageBoxNode };
 const InitialNodesJSON =  [{
 
 }]
-const initialNodes = [
-  {
-    id: "node1",
-    type: "textUpdater",
-    position: { x: 0, y: 0 },
-    data: { value: inputString },
-  },
-];
+const initialNodes = (jsonData);
+
 // we define the nodeTypes outside of the component to prevent re-renderings
 // you could also use useMemo inside the component
 // const initialNodes1  =  [
@@ -110,7 +105,7 @@ function ReactFlowSpace() {
     params.label = date;
     setElements((els) => addEdge(params, els));
   };
-  const getNodeId = () => `randomnode_${+new Date()}`;
+  //const getNodeId = () => `randomnode_${+new Date()}`;
   var elementsList = [];
   var tempElements = defaultData.elements;
   useEffect(() => {
@@ -152,7 +147,8 @@ function ReactFlowSpace() {
         name={name}
         image={image}
         onElementClick={onElementClick}
-        
+        //removeNode={removeNode}
+        //openContactDetails={openContactDetails}
       />
     );
   };
@@ -181,10 +177,27 @@ function ReactFlowSpace() {
   };
   //const {openBox, setOpenBox} =  useMessage();
   const {openBox, setOpenBox, onSaveState, 
-    setOnSaveState} = useMessage()
+    setOnSaveState, selectedNodeId, setSelectedNodeId} = useMessage()
   const onElementClick = (event, element) => {
     setOpenBox(!openBox)
+    setSelectedNodeId(element.id)
+      console.log(selectedNodeId, "selectedNode", element.id)
+    // if(openBox){
+      
+    // }
    
+    //setSelectedNodeId(node)
+    //setOpenBox(true)
+    //console.log(openBox, "openBox")
+    // if (element.source && element.target) {
+    //   setcurrentPlayer(element);
+    //   setOpenContectInstance(true);
+    // }
+    // if (element && element.data) {
+    //   setOpenDetails(true);
+    // } else {
+    //   setOpenContectInstance(true);
+    // }
   };
 
 
@@ -194,7 +207,7 @@ useEffect(()=>{
  console.log("local storage is set")
 },[onSaveState])
 
-
+  //const [rfInstance, setRfInstance] = useState(null);
 
   const onLoad = (_reactFlowInstance) =>{ 
     setRfInstance(_reactFlowInstance)
@@ -244,13 +257,16 @@ useEffect(()=>{
         y: event.clientY - reactFlowBounds.top,
       });
       const newNode = {
-        id: getId(),
-        type: "textUpdater",
-        position,
-        data: { value: inputString },
+        "id": getId(),
+        "type": "textUpdater",
+          position,
+        "data": { value: inputString },
       };
-
-      setNodes((nds) => nds.concat(newNode));
+      jsonData.push(newNode)
+      setNodes((nds) => nds.concat(jsonData));
+      
+      
+      //jsonData((nds) => nds.concat(json))
     },
     [reactFlowInstance]
   );

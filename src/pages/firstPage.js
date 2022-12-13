@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Header from '../components/header'
 import MessageBox from '../components/messageBox'
+import { MessageProvider, useMessage } from '../components/messageProvider'
 import NodesPanel from '../components/nodesPanel'
 import ReactFlowSpace from '../components/reactFlowSpace'
 import SettingPanelMessage from '../components/settingPanelMessage'
@@ -9,9 +10,10 @@ import SettingPanelMessage from '../components/settingPanelMessage'
 
 function FirstPage() {
   const [nodesPanel, setNodesPanel] = useState(true );
+  const {openBox, setOpenBox} =  useMessage();
   return (
     <div>
-    <Header/>
+      <Header/>
     <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
         <div style={{width:'100%', height:'100%'}}>
        {/* <MessageBox/> */}
@@ -21,13 +23,12 @@ function FirstPage() {
        </div>
   
         </div>
-            {nodesPanel ?
+            {openBox ?
             <NodesPanel/> :
             <SettingPanelMessage/>
             }
     
     </div>
-   
     </div>
   )
 }

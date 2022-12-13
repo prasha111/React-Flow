@@ -1,10 +1,21 @@
 import React from "react";
 import { useMessage } from "./messageProvider";
+import jsonData from './messageData';
 
 export default function SettingPanelMessage() {
-  const { inputText, setInputText} = useMessage()
+  const { inputText, setInputText,selectedNodeId ,setSelectedNodeId, } = useMessage()
   const setTextInput=(props)=>{
-    setInputText(props)
+    console.log(selectedNodeId, "sele")
+    if(selectedNodeId !== 0){
+      jsonData.map((component, index)=>{
+        //console.log(component.id, selectedNodeId, "checking")
+        if(component.id === selectedNodeId)
+          {jsonData[index].data.value = props} 
+       
+      })
+      setInputText(props)
+    }
+   
   }
   return(
   <div
