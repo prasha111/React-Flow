@@ -1,6 +1,11 @@
 import React from "react";
+import { useMessage } from "./messageProvider";
 
 export default function SettingPanelMessage() {
+  const { inputText, setInputText} = useMessage()
+  const setTextInput=(props)=>{
+    setInputText(props)
+  }
   return(
   <div
     style={{
@@ -39,7 +44,7 @@ export default function SettingPanelMessage() {
         text
       </div>
       <div style={{marginBottom:'40px', paddingBottom:'20px', borderBottom:'1px solid #DEDEDE'}}>
-      <textarea style={{height:'100px'}}></textarea>
+      <textarea style={{height:'100px'}} onChange={(event)=>{setTextInput(event.target.value)}}></textarea>
       </div>
     </div>
   

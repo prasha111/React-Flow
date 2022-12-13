@@ -10,7 +10,7 @@ import ReactFlow, {
   isNode,
   Background,
 } from "reactflow";
-import 'reactflow/dist/style.css';
+import "reactflow/dist/style.css";
 
 //import { EdgeRemoveChange } from "reactflow";
 //import { removeElements } from "react-flow-renderer";
@@ -22,6 +22,7 @@ import defaultData from "./KonnectionData1.json";
 import Sidebar from "./Sidebar";
 import MessageBoxNode from "./messageBoxNode";
 import messageSchema from "./messageSchema";
+import { useMessage } from "./messageProvider";
 
 //https://meet.google.com/qtb-isyp-kqy
 //https://reactflow.dev/docs/examples/interaction/drag-and-drop/
@@ -37,31 +38,40 @@ import messageSchema from "./messageSchema";
 // const nodeTypes = {
 //   special: CustomNode,
 // };
+const inputString = "cnsb dsjdbs"
 const nodeTypes = { textUpdater: MessageBoxNode };
+const InitialNodesJSON =  [{
+
+}]
 const initialNodes = [
-  { id: '1', type: 'textUpdater', position: { x: 0, y: 0 }, data: { value: 123 } },
+  {
+    id: "node1",
+    type: "textUpdater",
+    position: { x: 0, y: 0 },
+    data: { value: inputString },
+  },
 ];
 // we define the nodeTypes outside of the component to prevent re-renderings
 // you could also use useMemo inside the component
-const initialNodes1  =  [
-  {
-    id: 1,
-    type:'default',
-    position:{ x: 0, y: 0 },
-    data: { label: MessageBoxNode(id) }
-  }
-]
+// const initialNodes1  =  [
+//   {
+//     id: 1,
+//     type:'default',
+//     position:{ x: 0, y: 0 },
+//     data: { label: MessageBoxNode(id) }
+//   }
+// ]
 
 const drawerWidth = 240;
 
-const initialElements = [
-  {
-    id: "1",
-    type: "input",
-    data: { label: "Player 1" },
-    position: { x: 250, y: 5 },
-  },
-];
+// const initialElements = [
+//   {
+//     id: "1",
+//     type: "input",
+//     data: { label: "Player 1" },
+//     position: { x: 250, y: 5 },
+//   },
+// ];
 const nodeTypes1 = { textUpdater: MessageBoxNode };
 const style = {
   width: "160px",
@@ -73,13 +83,13 @@ const style = {
 };
 
 const flowKey = "example-flow";
-let id = 0;
-const getId = () => `dndnode_${id++}`;
-
+let id = 2;
+const getId = () => `node${id++}`;
 
 //const connectionLineStyle = { stroke: "blue" };
 
 function ReactFlowSpace() {
+ 
   // const reactFlowWrapper = useRef(null);
   // const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   // const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -93,10 +103,7 @@ function ReactFlowSpace() {
   const [openDetails, setOpenDetails] = useState(false);
   const [openContectInstance, setOpenContectInstance] = useState(false);
   const [currentPlayer, setcurrentPlayer] = React.useState(false);
-  // /const [open, setOpen] = React.useState(false);
-  // const [openVideoList, setOpenVideoList] = React.useState(false);
-  // const [tabValue, setTabValue] = useState(0);
-  // const [addPersonInTree, setAddPersonInTree] = useState(false);
+
 
   const onConnect = (params) => {
     const date = new Date().toDateString();
@@ -105,9 +112,8 @@ function ReactFlowSpace() {
   };
   const getNodeId = () => `randomnode_${+new Date()}`;
   var elementsList = [];
-    var tempElements = defaultData.elements;
+  var tempElements = defaultData.elements;
   useEffect(() => {
-  
     tempElements.map((element, index) => {
       if (element.source && element.target) {
         elementsList.push(element);
@@ -125,7 +131,7 @@ function ReactFlowSpace() {
         newNode.position = element.position;
         newNode.animated = true;
         newNode.data = {};
-        newNode.data.label = CustomNewNode(data.id, data.name, data.image);
+        newNode.data.label = MessageBoxNode(data.id);
         elementsList.push(newNode);
       }
     });
@@ -133,7 +139,7 @@ function ReactFlowSpace() {
     setElements((es) => es.concat(elementsList));
     //setElements(elementsList);
   }, [rfInstance]);
-  
+
   const onDragOver = (event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
@@ -159,7 +165,7 @@ function ReactFlowSpace() {
     const image = event.dataTransfer.getData("image");
     const position = rfInstance.project({
       x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top
+      y: event.clientY - reactFlowBounds.top,
     });
 
     const id = getId();
@@ -169,17 +175,22 @@ function ReactFlowSpace() {
       type,
       style,
       position,
-      data: { label: CustomNewNode(id,"new", image) }
+      data: { label: CustomNewNode(id, "new", image) },
     };
 
     if (type) setElements((es) => es.concat(newNode));
   };
+  //const {openBox, setOpenBox} =  useMessage();
+  const {openBox, setOpenBox, onSaveState, 
+    setOnSaveState} = useMessage()
   const onElementClick = (event, element) => {
-    console.log("element", element);
-    if (element.source && element.target) {
-      setcurrentPlayer(element);
-      setOpenContectInstance(true);
-    }
+    setOpenBox(!openBox)
+    //setOpenBox(true)
+    //console.log(openBox, "openBox")
+    // if (element.source && element.target) {
+    //   setcurrentPlayer(element);
+    //   setOpenContectInstance(true);
+    // }
     // if (element && element.data) {
     //   setOpenDetails(true);
     // } else {
@@ -187,176 +198,44 @@ function ReactFlowSpace() {
     // }
   };
 
-  // const removeNode = (id) => {
-  //   if (rfInstance) {
-  //     const flow = rfInstance.toObject();
-  //     const selectedNode = flow.elements.filter((els) => els.id === id);
-  //     //onElementsRemove(selectedNode);
-  //   }
 
-  //   if (elements) {
-  //     const selectedNode = elements.filter((els) => els.id === id);
-  //     //onElementsRemove(selectedNode);
-  //   }
-  // };
 
-  // const onElementsRemove = (elementsToRemove) =>
-  //   setElements((els) => removeElements(elementsToRemove, els));
+useEffect(()=>{
+ onSave()
+ console.log("local storage is set")
+},[onSaveState])
 
-  // const onLoad = (_reactFlowInstance) => setRfInstance(_reactFlowInstance);
+  //const [rfInstance, setRfInstance] = useState(null);
 
-  // const onSave = () => {
-  //   if (rfInstance) {
-  //     const flow = rfInstance.toObject();
-  //     console.log("Result::", JSON.stringify(flow));
-  //     localStorage.setItem(JSON.stringify(flowKey), flow);
-  //   }
-  //   if (elements) {
-  //     console.log("elements::", JSON.stringify(elements));
-  //   }
-  // };
+  const onLoad = (_reactFlowInstance) =>{ 
+    setRfInstance(_reactFlowInstance)
+    console.log(reactFlowInstance)
+  };
+  const onSave = () => {
+    
+      //const flow = rfInstance.toObject();
+      console.log(edges, "edges", nodes)
+      //console.log("Result::", JSON.stringify(flow));
+      localStorage.clear()
+      localStorage.setItem("edgesData", edges);
 
-  // const onDragOver = (event) => {
-  //   event.preventDefault();
-  //   event.dataTransfer.dropEffect = "move";
-  // };
+      localStorage.setItem("nodesData", nodes);
 
-  // const CustomNewNode = (id, name, image) => {
-  //   return <CustomNode />;
-  // };
+   
+  };
 
-  // const onDrop = (event) => {
-  //   event.preventDefault();
-  //   const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-  //   const type = event.dataTransfer.getData("application/reactflow");
-  //   const name = event.dataTransfer.getData("name");
-  //   const image = event.dataTransfer.getData("image");
-  //   const position = rfInstance.project({
-  //     x: event.clientX - reactFlowBounds.left,
-  //     y: event.clientY - reactFlowBounds.top,
-  //   });
-
-  //   const id = getId();
-
-  //   const newNode = {
-  //     id: id,
-  //     type,
-  //     style,
-  //     position,
-  //     data: { label: CustomNewNode(id, name, image) },
-  //   };
-
-  //   if (type) setElements((es) => es.concat(newNode));
-  // };
-
-  // const onElementClick = (event, element) => {
-  //   console.log("element", element);
-  //   if (element.source && element.target) {
-  //     setcurrentPlayer(element);
-  //     setOpenContectInstance(true);
-  //   }
-  //   if (element && element.data) {
-  //     setOpenDetails(true);
-  //   } else {
-  //     setOpenContectInstance(true);
-  //   }
-  // };
-
-  // const openContactDetails = (id) => {
-  //   if (id && rfInstance) {
-  //     const flow = rfInstance.toObject();
-  //     const selectedNode = flow.elements.filter((els) => els.id === id);
-  //     setcurrentPlayer(selectedNode[0]);
-  //     setOpenDetails(true);
-  //   }
-  //setcurrentPlayer(element);
-  //if (element && element.data) {
-
-  //} else {
-  //   setOpenContectInstance(true);
-  //}
-  // };
-
-  // const resetStatus = () => {
-  //   setAddPersonInTree(false);
-  // };
-
-  //  const onLayout = useCallback(
-  //    (direction) => {
-  //      const layoutedElements = getLayoutedElements(elements, direction);
-  //      setElements(layoutedElements);
-  //    },
-  //    [elements]
-  //  );
-  // const dagreGraph = new dagre.graphlib.Graph();
-  // dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-  // const getLayoutedElements = (elements, direction = "TB") => {
-  //   const isHorizontal = direction === "LR";
-  //   dagreGraph.setGraph({ rankdir: direction });
-  //   elements.forEach((el) => {
-  //     if (isNode(el)) {
-  //       dagreGraph.setNode(el.id, { width: 200, height: 350 });
-  //     } else {
-  //       dagreGraph.setEdge(el.source, el.target);
-  //     }
-  //   });
-  //   dagre.layout(dagreGraph);
-  //   return elements.map((el) => {
-  //     if (isNode(el)) {
-  //       const nodeWithPosition = dagreGraph.node(el.id);
-  //       el.targetPosition = isHorizontal ? "left" : "top";
-  //       el.sourcePosition = isHorizontal ? "right" : "bottom";
-  //       // unfortunately we need this little hack to pass a slighltiy different position
-  //       // in order to notify react flow about the change
-  //       el.position = {
-  //         x: nodeWithPosition.x + Math.random() / 1000,
-  //         y: nodeWithPosition.y
-  //       };
-  //     }
-  //     return el;
-  //   });
-  // };
-
-  // const dagreGraph = new dagre.graphlib.Graph();
-  // dagreGraph.setDefaultEdgeLabel(() => ({}));
-
-  // const getLayoutedElements = (elements, direction = "TB") => {
-  //   const isHorizontal = direction === "LR";
-  //   dagreGraph.setGraph({ rankdir: direction });
-  //   elements.forEach((el) => {
-  //     if (isNode(el)) {
-  //       dagreGraph.setNode(el.id, { width: 200, height: 350 });
-  //     } else {
-  //       dagreGraph.setEdge(el.source, el.target);
-  //     }
-  //   });
-  //   dagre.layout(dagreGraph);
-  //   return elements.map((el) => {
-  //     if (isNode(el)) {
-  //       const nodeWithPosition = dagreGraph.node(el.id);
-  //       el.targetPosition = isHorizontal ? "left" : "top";
-  //       el.sourcePosition = isHorizontal ? "right" : "bottom";
-  //       // unfortunately we need this little hack to pass a slighltiy different position
-  //       // in order to notify react flow about the change
-  //       el.position = {
-  //         x: nodeWithPosition.x + Math.random() / 1000,
-  //         y: nodeWithPosition.y
-  //       };
-  //     }
-  //     return el;
-  //   });
-  // };
-  //const reactFlowWrapper = useRef(null);
-  //const nodeTypes = useMemo(() => ({ textUpdater: TextUpdaterNode }), []);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const onConnect1 = useCallback((params) => setEdges((eds) => addEdge(params, eds)), []);
+  const onConnect1 = useCallback(
+    (params) => setEdges((eds) => addEdge(params, eds)),
+    []
+  );
 
   const onDragOver1 = useCallback((event) => {
     event.preventDefault();
-    event.dataTransfer.dropEffect = 'move';
+    event.dataTransfer.dropEffect = "move";
+    
   }, []);
 
   const onDrop1 = useCallback(
@@ -364,10 +243,10 @@ function ReactFlowSpace() {
       event.preventDefault();
 
       const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-      const type = event.dataTransfer.getData('application/reactflow');
+      const type = event.dataTransfer.getData("application/reactflow");
 
       // check if the dropped element is valid
-      if (typeof type === 'undefined' || !type) {
+      if (typeof type === "undefined" || !type) {
         return;
       }
 
@@ -377,42 +256,46 @@ function ReactFlowSpace() {
       });
       const newNode = {
         id: getId(),
-        type: "default",
+        type: "textUpdater",
         position,
-        data: { value: 123 }
+        data: { value: inputString },
       };
 
       setNodes((nds) => nds.concat(newNode));
     },
     [reactFlowInstance]
-  )
-  
+  );
+ 
+  const functionClick = (event, element)=>{
+    setOpenBox(!openBox)
+  }
+
   return (
     <ReactFlowProvider>
-    
-      <div className="reactflow-wrapper" ref={reactFlowWrapper} style={{width:'100%', height:'100vh'}} >
+      <div
+        className="reactflow-wrapper"
+        ref={reactFlowWrapper}
+        style={{ width: "100%", height: "100vh" }}
+      >
         <ReactFlow
-   
           nodes={nodes}
           edges={edges}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect1}
           onInit={setReactFlowInstance}
+          onNodeClick={onElementClick}
+          onLoad={onLoad}
+          //onElementClick={onElementClick}
           onDrop={onDrop1}
           onDragOver={onDragOver1}
           nodeTypes={nodeTypes1}
           fitView
         >
-         
           <Controls />
-          </ReactFlow>
-        
+        </ReactFlow>
       </div>
-   
- 
-
-  </ReactFlowProvider>
+    </ReactFlowProvider>
   );
 }
 
