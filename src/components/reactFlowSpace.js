@@ -152,8 +152,7 @@ function ReactFlowSpace() {
         name={name}
         image={image}
         onElementClick={onElementClick}
-        //removeNode={removeNode}
-        //openContactDetails={openContactDetails}
+        
       />
     );
   };
@@ -185,17 +184,7 @@ function ReactFlowSpace() {
     setOnSaveState} = useMessage()
   const onElementClick = (event, element) => {
     setOpenBox(!openBox)
-    //setOpenBox(true)
-    //console.log(openBox, "openBox")
-    // if (element.source && element.target) {
-    //   setcurrentPlayer(element);
-    //   setOpenContectInstance(true);
-    // }
-    // if (element && element.data) {
-    //   setOpenDetails(true);
-    // } else {
-    //   setOpenContectInstance(true);
-    // }
+   
   };
 
 
