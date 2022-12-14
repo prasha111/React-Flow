@@ -97,6 +97,11 @@ function ReactFlowSpace() {
   const [openContectInstance, setOpenContectInstance] = useState(false);
   const [currentPlayer, setcurrentPlayer] = React.useState(false);
 
+  const onConnect = (params) => {
+    const date = new Date().toDateString();
+    params.label = date;
+    setElements((els) => addEdge(params, els));
+  };
   //const getNodeId = () => `randomnode_${+new Date()}`;
   var elementsList = [];
   var tempElements = defaultData.elements;
@@ -127,14 +132,68 @@ function ReactFlowSpace() {
     //setElements(elementsList);
   }, [rfInstance]);
 
+  const onDragOver = (event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+  };
 
+  const CustomNewNode = (id, name, image) => {
+    return (
+      <CustomNode
+        id={id}
+        name={name}
+        image={image}
+        onElementClick={onElementClick}
+        //removeNode={removeNode}
+        //openContactDetails={openContactDetails}
+      />
+    );
+  };
+  const onDrop = (event) => {
+    event.preventDefault();
+    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+    const type = event.dataTransfer.getData("application/reactflow");
+    const name = event.dataTransfer.getData("name");
+    const image = event.dataTransfer.getData("image");
+    const position = rfInstance.project({
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top,
+    });
+
+    const id = getId();
+
+    const newNode = {
+      id: id,
+      type,
+      style,
+      position,
+      data: { label: CustomNewNode(id, "new", image) },
+    };
+
+    if (type) setElements((es) => es.concat(newNode));
+  };
+  //const {openBox, setOpenBox} =  useMessage();
+  const {
+    openBox,
+    setOpenBox,
+    onSaveState,
+    setOnSaveState,
+    selectedNodeId,
+    setSelectedNodeId,
+  } = useMessage();
+  const onElementClick = (event, element) => {
+    setOpenBox(!openBox);
+    setSelectedNodeId(element.id);
+    console.log(selectedNodeId, "selectedNode", element.id);
+
+  };
 
   useEffect(() => {
     onSave();
     console.log("local storage is set");
   }, [onSaveState]);
 
-  //const [rfInstance, setRfInstance] = useState(null);
+
 
   const onLoad = (_reactFlowInstance) => {
     setRfInstance(_reactFlowInstance);
