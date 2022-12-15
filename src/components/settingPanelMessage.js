@@ -3,7 +3,7 @@ import { useMessage } from "./messageProvider";
 import jsonData from './messageData';
 
 export default function SettingPanelMessage() {
-  const { inputText, setInputText,selectedNodeId ,setSelectedNodeId, } = useMessage()
+  const { inputText, setInputText,selectedNodeId ,setSelectedNodeId,setOpenBox, openBox } = useMessage()
   const setTextInput=(props)=>{
     console.log(selectedNodeId, "sele")
     if(selectedNodeId !== 0){
@@ -30,7 +30,7 @@ export default function SettingPanelMessage() {
   >
  
      <div style={{display:'flex', flexDirection:'row', columnGap:'20px', borderBottom:'1px solid #DEDEDE'}}>
-    <div style={{ width: "7%", float:'left', flex:'1'}}>
+    <div onClick={()=>{setOpenBox(!openBox)}} style={{ width: "7%", float:'left', flex:'1'}}>
       
         <svg width={'20px'}
           xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +55,7 @@ export default function SettingPanelMessage() {
         text
       </div>
       <div style={{marginBottom:'40px', paddingBottom:'20px', borderBottom:'1px solid #DEDEDE'}}>
-      <textarea style={{height:'100px'}} onChange={(event)=>{setTextInput(event.target.value)}}></textarea>
+      <textarea style={{height:'100px', width:'100%'}} onChange={(event)=>{setTextInput(event.target.value)}}></textarea>
       </div>
     </div>
   
