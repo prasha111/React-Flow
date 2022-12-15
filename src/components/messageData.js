@@ -6,7 +6,7 @@ const jsonData =  [
             "id": "node1",
             "type": "textUpdater",
             "position": { x: 0, y: 0},
-            "data": { "value": "Set some random Value"}
+            "data": { "value": "Enter your message here"}
         }
     ]
 export default jsonData;

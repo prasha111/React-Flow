@@ -139,7 +139,7 @@ function ReactFlowSpace() {
         id: getId(),
         type: "textUpdater",
         position,
-        data: { value: inputString },
+        data: { value: "Enter your message here" },
       };
       jsonData.push(newNode);
       setNodes((nds) => nds.concat(jsonData));
